@@ -38,6 +38,7 @@ const Products = () => {
   };
 
   useEffect(() => {
+    if(!products.length) return;
     setIsLoading(true);
     performAPICall()
       .then((data) => {
