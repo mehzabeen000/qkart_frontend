@@ -2,6 +2,7 @@ import Register from "./components/Register";
 import ipConfig from "./ipConfig.json";
 import { Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
+// import Header from "./components/Header";
 import Products from "./components/Products";
 
 export const config = {
@@ -11,8 +12,18 @@ export const config = {
 function App() {
   return (
     <div className="App">
-      {/* TODO: CRIO_TASK_MODULE_LOGIN - To add configure routes and their mapping */}
+      {/* <Header /> */}
+      <Switch>
+        <Route exact path="/register">
           <Register />
+        </Route>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route exact path="/">
+          <Products />
+        </Route>
+      </Switch>
     </div>
   );
 }

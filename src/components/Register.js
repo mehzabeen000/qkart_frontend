@@ -1,14 +1,16 @@
 import { Button, CircularProgress, Stack, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
+import { useHistory, Link } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
-import "./Register.css";
+import './Register.css'
 
 const Register = () => {
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({
     username: "",
@@ -27,6 +29,7 @@ const Register = () => {
       });
       enqueueSnackbar("Registration successful", { variant: "success" });
       setLoading(false);
+      history.push("/login"); 
     } catch (error) {
       if (error.response.status === 400 && error.response) {
         return enqueueSnackbar(error.response.data.message, {
@@ -132,9 +135,9 @@ const Register = () => {
           </Button>
           <p className="secondary-action">
             Already have an account?{" "}
-            <a className="link" href="#">
+            <Link className="link" to='/login'>
               Login here
-            </a>
+            </Link>
           </p>
         </Stack>
       </Box>
