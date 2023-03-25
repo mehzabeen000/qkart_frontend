@@ -26,7 +26,7 @@ const Login = () => {
         username: formData.username,
         password: formData.password,
       });
-      enqueueSnackbar("Registration successful", { variant: "success" });
+      enqueueSnackbar("Logged in", { variant: "success" });
       setLoading(false);
       const { token, username, balance } = response.data;
       persistLogin(token, username, balance)
@@ -34,7 +34,6 @@ const Login = () => {
       window.location.reload();
       // return response.data;
     } catch (error) {
-      console.log(error.response)
       if (error.response.status === 400 && error.response) {
         return enqueueSnackbar(error.response.data.message, {
           variant: "error",

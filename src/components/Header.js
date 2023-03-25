@@ -11,14 +11,14 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
   const loginView = (
     <>
       {!localStorage.getItem("token") && !hasHiddenAuthButtons && (
-        <>
-          <Link to="/register" className="header-button">
-            REGISTER
-          </Link>
-          <Link to="/login" className="header-button">
+        <Stack direction="row" spacing={2}>
+          <Button className="header-button" onClick={() => history.push("/login")}>
             LOGIN
-          </Link>
-        </>
+          </Button>
+          <Button className="header-button" variant="contained" onClick={() => history.push("/register")}>
+            REGISTER
+          </Button>
+        </Stack>
       )}
     </>
   );
@@ -26,9 +26,19 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
   const productsView = (
     <>
       {localStorage.getItem("token") && !hasHiddenAuthButtons && (
-        <Stack direction="row" spacing={2}>
-          <img src="avatar.png" alt="User avatar"></img>
-          <Button className="explore-button" variant="text" onClick={() => {}}>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Avatar src="avatar.png" alt={localStorage.getItem("username")}/>
+          <span>{localStorage.getItem("username") || ""}</span>
+          <Button
+            className="explore-button"
+            variant="text"
+            onClick={() => {
+              localStorage.removeItem("username");
+              localStorage.removeItem("token");
+              localStorage.removeItem("balance");
+              window.location.reload();
+            }}
+          >
             LOGOUT
           </Button>
         </Stack>
@@ -43,7 +53,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
           className="explore-button"
           startIcon={<ArrowBackIcon />}
           variant="text"
-          onClick={() => history.push('/')}
+          onClick={() => history.push("/")}
         >
           Back to explore
         </Button>
