@@ -11,7 +11,6 @@ export const config = {
 function App() {
   return (
     <div className="App">
-      {/* <Header /> */}
       <Switch>
         <Route exact path="/register">
           <Register />
