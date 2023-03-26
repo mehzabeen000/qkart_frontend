@@ -4,6 +4,7 @@ import {
   Grid,
   InputAdornment,
   TextField,
+  Typography
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
@@ -24,8 +25,10 @@ const Products = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const performAPICall = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${config.endpoint}/products`);
+      setIsLoading(false);
       return response.data;
     } catch (error) {
       enqueueSnackbar(
@@ -34,17 +37,16 @@ const Products = () => {
           variant: "error",
         }
       );
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if(!products.length) return;
-    setIsLoading(true);
+    if (products.length) return;
     performAPICall()
       .then((data) => {
         setProducts(data);
         setFilteredProducts(data);
-        setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
   }, [products]);
@@ -57,9 +59,9 @@ const Products = () => {
       setFilteredProducts([...response.data]);
     } catch (error) {
       setFilteredProducts([...[]]);
-      const errorMessage = "Failed to search products";
-      enqueueSnackbar(errorMessage, { variant: "error" });
-      throw new Error(errorMessage);
+      // const errorMessage = "No Products Found";
+      // enqueueSnackbar(errorMessage, { variant: "error" });
+      // throw new Error(errorMessage);
     }
   };
 
@@ -112,6 +114,7 @@ const Products = () => {
       />
       <Grid
         container
+        key='products-container'
         spacing={2}
         direction="row"
         justifyContent="center"
@@ -126,11 +129,14 @@ const Products = () => {
           </Box>
         </Grid>
         {isLoading ? (
-          <CircularProgress
-            color="primary"
-            size={40}
-            className="loading-products"
-          />
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress
+              color="primary"
+              size={40}
+              className="loading-products"
+            />
+             <Typography position='absolute'>Loading Products...</Typography>
+          </Box>
         ) : filteredProducts.length ? (
           filteredProducts.map((product) => (
             <Grid
@@ -145,7 +151,7 @@ const Products = () => {
             </Grid>
           ))
         ) : (
-          <>No products found</>
+          <Typography position='absolute'>No products found</Typography>
         )}
       </Grid>
 
