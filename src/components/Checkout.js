@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { config } from "../App";
 import Cart, { getTotalCartValue, generateCartItemsFrom } from "./Cart";
+import { fetchCart } from "./Products";
 import "./Checkout.css";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -45,12 +46,16 @@ import Header from "./Header";
 
 
 const Checkout = () => {
+  const [cart, setCart] = useState([]);
 
-
-
-
-
-
+  useEffect(() => {
+    if(cart.length) return;
+    const fetchCartData = async () => {
+      const cartData = await fetchCart(localStorage.getItem("token"));
+      setCart(cartData);
+    }
+    fetchCartData();
+  }, [])
 
 
 
@@ -84,7 +89,7 @@ const Checkout = () => {
             <Box my="1rem">
               <Typography>Wallet</Typography>
               <Typography>
-                Pay ${getTotalCartValue(items)} of available $
+                Pay ${getTotalCartValue(cart)} of available $
                 {localStorage.getItem("balance")}
               </Typography>
             </Box>
@@ -98,7 +103,7 @@ const Checkout = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={3} bgcolor="#E9F5E1">
-          <Cart isReadOnly products={products} items={items} />
+          <Cart isReadOnly products={[]} items={cart} />
         </Grid>
       </Grid>
       <Footer />

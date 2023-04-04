@@ -21,22 +21,24 @@ const ProductCard = ({ product, handleAddToCart }) => {
         alt={product.name}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
           {product.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        {/* <Typography variant="body2" color="text.secondary">
           {product.category}
-        </Typography>
-        <Rating name="product-rating" value={product.rating} readOnly />
+        </Typography> */}
         <Typography variant="h6" color="text.secondary">
           ${product.cost}
         </Typography>
+        <Rating name="product-rating" value={product.rating} readOnly />
       </CardContent>
       <CardActions>
         <Button
+          fullWidth
+          variant="contained"
           size="small"
           color="primary"
-          onClick={() => handleAddToCart(product)}
+          onClick={async() => await handleAddToCart()}
           startIcon={<AddShoppingCartOutlined />}
         >
           ADD TO CART
