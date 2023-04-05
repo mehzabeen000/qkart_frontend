@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AddOutlined,
   RemoveOutlined,
@@ -6,7 +7,6 @@ import {
 } from "@mui/icons-material";
 import { Button, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Cart.css";
 
