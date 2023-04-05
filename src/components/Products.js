@@ -127,15 +127,16 @@ const Products = () => {
       if (!token) {
         throw new Error("No token found");
       }
-      const response = await axios.get(`${config.endpoint}/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const cartItem = response.data.find(
+      const cartItemIndex = cart.findIndex(
         (item) => item.productId === productId
       );
-      cartItem && cartItem.qty === 1 && qty === -1
-        ? (qty = 0)
-        : (qty += cartItem.qty);
+  
+      if (cartItemIndex !== -1) {
+        qty += cart[cartItemIndex].qty;
+        if (qty < 0) {
+          qty = 0;
+        }
+      }
       await handleAddToCart(productId, qty);
     } catch (error) {
       console.error(error);

@@ -152,23 +152,23 @@ describe("Cart Component", () => {
     );
   });
 
-  // it("should show items in cart view by parsing the response data", () => {
-  //   const item1 = screen.getAllByText(/Tan Leatherette Weekender Duffle/);
-  //   const item2 = screen.getAllByText(/The Minimalist Slim Leather Watch/);
+  it("should show items in cart view by parsing the response data", () => {
+    const item1 = screen.getAllByText(/Tan Leatherette Weekender Duffle/);
+    const item2 = screen.getAllByText(/The Minimalist Slim Leather Watch/);
 
-  //   const item1Price = screen.getAllByText("$150");
-  //   const item2Price = screen.getAllByText("$60");
+    const item1Price = screen.getAllByText("$150");
+    const item2Price = screen.getAllByText("$60");
 
-  //   const totalPrice = screen.getByText("$360");
+    const totalPrice = screen.getByText("$360");
 
-  //   // Item will be present both on Products view and Cart view
-  //   expect(item1.length).toEqual(2);
-  //   expect(item2.length).toEqual(2);
-  //   // Element matched by "$150", will fail if cost on cart doesn't have "$" symbol
-  //   expect(item1Price.length).toEqual(2);
-  //   expect(item2Price.length).toEqual(2);
-  //   expect(totalPrice).toBeInTheDocument();
-  // });
+    // Item will be present both on Products view and Cart view
+    expect(item1.length).toEqual(2);
+    expect(item2.length).toEqual(2);
+    // Element matched by "$150", will fail if cost on cart doesn't have "$" symbol
+    expect(item1Price.length).toEqual(2);
+    expect(item2Price.length).toEqual(2);
+    expect(totalPrice).toBeInTheDocument();
+  });
 
   it("should be able to increase quantity of product in cart", async () => {
     const btn = screen.getAllByTestId("AddOutlinedIcon")[0];
@@ -200,34 +200,34 @@ describe("Cart Component", () => {
     expect(cartTotal.textContent).toEqual("$510");
   });
 
-  // it("should be able to decrease quantity of product in cart", async () => {
-  //   const btn = screen.getAllByTestId("RemoveOutlinedIcon")[1];
+  it("should be able to decrease quantity of product in cart", async () => {
+    const btn = screen.getAllByTestId("RemoveOutlinedIcon")[1];
 
-  //   act(() => {
-  //     userEvent.click(btn);
-  //   });
+    act(() => {
+      userEvent.click(btn);
+    });
 
-  //   const cartRemoveCall = mock.history.post.find(
-  //     (req) =>
-  //       req.url === `${config.endpoint}/cart` &&
-  //       req.data === '{"productId":"TwMM4OAhmK0VQ93S","qty":0}'
-  //   );
+    const cartRemoveCall = mock.history.post.find(
+      (req) =>
+        req.url === `${config.endpoint}/cart` &&
+        req.data === '{"productId":"TwMM4OAhmK0VQ93S","qty":0}'
+    );
 
-  //   expect(cartRemoveCall).toBeTruthy();
-  //   expect(cartRemoveCall.url).toBe(`${config.endpoint}/cart`);
-  //   expect(cartRemoveCall.headers.Authorization).toBe(
-  //     `Bearer ${localStorage.getItem("token")}`
-  //   );
-  //   expect(JSON.parse(cartRemoveCall.data)).toEqual(
-  //     expect.objectContaining({
-  //       productId: "TwMM4OAhmK0VQ93S",
-  //       qty: 0,
-  //     })
-  //   );
+    expect(cartRemoveCall).toBeTruthy();
+    expect(cartRemoveCall.url).toBe(`${config.endpoint}/cart`);
+    expect(cartRemoveCall.headers.Authorization).toBe(
+      `Bearer ${localStorage.getItem("token")}`
+    );
+    expect(JSON.parse(cartRemoveCall.data)).toEqual(
+      expect.objectContaining({
+        productId: "TwMM4OAhmK0VQ93S",
+        qty: 0,
+      })
+    );
 
-  //   const cartTotal = await screen.findByTestId("cart-total");
-  //   expect(cartTotal.textContent).toEqual("$300");
-  // });
+    const cartTotal = await screen.findByTestId("cart-total");
+    expect(cartTotal.textContent).toEqual("$300");
+  });
 
   it("removes the item from cart if quantity is less than one", async () => {
     const btn = screen.getAllByTestId("RemoveOutlinedIcon")[1];

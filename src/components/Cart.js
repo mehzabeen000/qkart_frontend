@@ -44,13 +44,14 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
 };
 
 const Cart = ({ products, items = [], handleQuantity }) => {
-  const [cartItems, setCartItems] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
   const history = useHistory();
+  const cartItems = generateCartItemsFrom(items, products);
 
-  useEffect(() => {
-    const data = generateCartItemsFrom(items, products);
-    if (data) setCartItems(data);
-  }, [items, products]);
+  // useEffect(() => {
+  //   const data = generateCartItemsFrom(items, products);
+  //   if (data) setCartItems(data);
+  // }, [items, products]);
 
   if (!cartItems.length) {
     return (
@@ -96,11 +97,15 @@ const Cart = ({ products, items = [], handleQuantity }) => {
               >
                 <ItemQuantity
                   value={item.qty}
-                  handleAdd={async() => await handleQuantity(item.productId, 1)}
-                  handleDelete={async() => await handleQuantity(item.productId, -1)}
+                  handleAdd={async () =>
+                    await handleQuantity(item.productId, 1)
+                  }
+                  handleDelete={async () =>
+                    await handleQuantity(item.productId, -1)
+                  }
                 />
                 <Box padding="0.5rem" fontWeight="700">
-                  {`$${item.cost * item.qty}`}
+                  ${item.cost}
                 </Box>
               </Box>
             </Box>
