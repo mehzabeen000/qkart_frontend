@@ -5,7 +5,7 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { Button, IconButton, Stack } from "@mui/material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import "./Cart.css";
@@ -27,6 +27,12 @@ export const getTotalCartValue = (items = []) => {
   return total;
 };
 
+export const getTotalCartItem = (items = []) => {
+  if (!items.length) return 0;
+  let total = items.map((item) => item.qty).reduce((total, i) => total + i);
+  return total;
+};
+
 const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
   return (
     <Stack direction="row" alignItems="center">
@@ -43,15 +49,9 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
   );
 };
 
-const Cart = ({ products, items = [], handleQuantity }) => {
-  // const [cartItems, setCartItems] = useState([]);
+const Cart = ({ products, items = [], handleQuantity, isReadOnly }) => {
   const history = useHistory();
   const cartItems = generateCartItemsFrom(items, products);
-
-  // useEffect(() => {
-  //   const data = generateCartItemsFrom(items, products);
-  //   if (data) setCartItems(data);
-  // }, [items, products]);
 
   if (!cartItems.length) {
     return (
@@ -95,15 +95,21 @@ const Cart = ({ products, items = [], handleQuantity }) => {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <ItemQuantity
-                  value={item.qty}
-                  handleAdd={async () =>
-                    await handleQuantity(item.productId, 1)
-                  }
-                  handleDelete={async () =>
-                    await handleQuantity(item.productId, -1)
-                  }
-                />
+                {isReadOnly ? (
+                  <Typography variant="body1" fontWeight="700">
+                    {`Qty: ${item.qty}`}
+                  </Typography>
+                ) : (
+                  <ItemQuantity
+                    value={item.qty}
+                    handleAdd={async () =>
+                      await handleQuantity(item.productId, 1)
+                    }
+                    handleDelete={async () =>
+                      await handleQuantity(item.productId, -1)
+                    }
+                  />
+                )}
                 <Box padding="0.5rem" fontWeight="700">
                   ${item.cost}
                 </Box>
@@ -132,18 +138,105 @@ const Cart = ({ products, items = [], handleQuantity }) => {
           </Box>
         </Box>
 
-        <Box display="flex" justifyContent="flex-end" className="cart-footer">
-          <Button
-            color="primary"
-            variant="contained"
-            startIcon={<ShoppingCart />}
-            className="checkout-btn"
-            onClick={() => history.push("/checkout")}
-          >
-            Checkout
-          </Button>
-        </Box>
+        {history.location.pathname === "/checkout" ? (
+          <></>
+        ) : (
+          <Box display="flex" justifyContent="flex-end" className="cart-footer">
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<ShoppingCart />}
+              className="checkout-btn"
+              onClick={() => history.push("/checkout")}
+            >
+              Checkout
+            </Button>
+          </Box>
+        )}
       </Box>
+
+      {history.location.pathname === "/checkout" ? (
+        <Box className="cart">
+          <Box
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box
+              color="#3C3C3C"
+              fontWeight="700"
+              fontSize="1.5rem"
+              alignSelf="center"
+            >
+              Order Details
+            </Box>
+          </Box>
+
+          <Box
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box color="#3C3C3C" alignSelf="center">
+              Products
+            </Box>
+            <Box color="#3C3C3C">{getTotalCartItem(cartItems)}</Box>
+          </Box>
+
+          <Box
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box color="#3C3C3C" alignSelf="center">
+              Subtotal
+            </Box>
+            <Box color="#3C3C3C">${getTotalCartValue(cartItems)}</Box>
+          </Box>
+
+          <Box
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box color="#3C3C3C" alignSelf="center">
+              Shipping Charges
+            </Box>
+            <Box color="#3C3C3C">$0</Box>
+          </Box>
+
+          <Box
+            padding="1rem"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box
+              color="#3C3C3C"
+              alignSelf="center"
+              fontWeight="700"
+              fontSize="1.2rem"
+            >
+              Total
+            </Box>
+            <Box
+              color="#3C3C3C"
+              fontWeight="700"
+              fontSize="1.2rem"
+              alignSelf="center"
+              data-testid="cart-total"
+            >
+              ${getTotalCartValue(cartItems)}
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
