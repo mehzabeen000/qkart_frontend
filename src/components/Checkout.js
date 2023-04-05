@@ -266,7 +266,7 @@ const Checkout = () => {
         enqueueSnackbar("Please login to view your addresses", {
           variant: "info",
         });
-        history.push("/products");
+        history.push("/");
       } else {
         try {
           await getAddresses(token);
